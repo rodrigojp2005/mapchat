@@ -14,6 +14,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+use App\Http\Controllers\Api\QuestionController;
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+    // Extra closing brace removed
+Route::get('/question/random', [QuestionController::class, 'random']);
+Route::post('/question/guess', [QuestionController::class, 'guess']);
