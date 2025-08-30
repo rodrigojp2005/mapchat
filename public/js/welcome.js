@@ -7,19 +7,19 @@ let maxAttempts = 3;
 let marker = null;
 
 function initMap() {
-    map = new google.maps.Map(document.getElementById('map'), {
+    const mapDiv = document.getElementById('map');
+    if (!mapDiv) {
+        console.error('Elemento #map não encontrado!');
+        return;
+    }
+    map = new google.maps.Map(mapDiv, {
         center: { lat: -14.2350, lng: -51.9253 }, // Centro do Brasil
         zoom: 4,
         disableDefaultUI: true,
     });
     fetchQuestion();
     map.addListener('click', onMapClick);
-    // Mostrar controles de zoom apenas em desktop
-    if (window.innerWidth > 700) {
-        document.getElementById('zoomControls').style.display = 'flex';
-    } else {
-        document.getElementById('zoomControls').style.display = 'none';
-    }
+    // Controles de zoom agora são botões fixos, não precisam de toggle JS
 }
 
 function fetchQuestion() {
@@ -32,8 +32,9 @@ function fetchQuestion() {
             }
             currentQuestion = data;
             document.getElementById('questionText').innerText = data.question_text;
-            document.getElementById('hint').style.display = data.hint ? 'block' : 'none';
-            document.getElementById('hint').innerText = data.hint || '';
+            // Exibe o nome do usuário que criou a pergunta
+            document.getElementById('hint').style.display = 'block';
+            document.getElementById('hint').innerText = 'Pergunta criada por: ' + (data.user_name ? data.user_name : 'anônimo');
             attempts = 0;
             resetTimer();
         })
