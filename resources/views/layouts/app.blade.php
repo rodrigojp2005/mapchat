@@ -67,10 +67,27 @@
         </footer>
 
         <script>
-            function toggleMenu() {
+            document.addEventListener('DOMContentLoaded', function() {
                 const menu = document.getElementById('mobileMenu');
-                menu.classList.toggle('hidden');
-            }
+                const btn = document.getElementById('navbarMenu');
+                // Toggle menu ao clicar no botão
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    menu.classList.toggle('hidden');
+                });
+                // Fecha ao clicar fora
+                document.addEventListener('click', function(e) {
+                    if (!menu.classList.contains('hidden') && !menu.contains(e.target) && e.target !== btn && !btn.contains(e.target)) {
+                        menu.classList.add('hidden');
+                    }
+                });
+                // Fecha ao clicar em qualquer link/botão do menu
+                menu.querySelectorAll('a,button').forEach(el => {
+                    el.addEventListener('click', function() {
+                        menu.classList.add('hidden');
+                    });
+                });
+            });
         </script>
         @stack('scripts')
     </body>
