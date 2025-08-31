@@ -64,7 +64,7 @@ function fetchQuestion() {
     console.log('Pergunta carregada:', currentQuestion);
     document.getElementById('questionText').innerText = currentQuestion.question_text;
     document.getElementById('hint').style.display = 'block';
-    document.getElementById('hint').innerText = 'Pergunta criada por: ' + (currentQuestion.user_name ? currentQuestion.user_name : 'anônimo');
+    document.getElementById('hint').innerHTML = `<b>Pergunta criada por:</b> ${currentQuestion.user_name ? currentQuestion.user_name : 'anônimo'}`;
     attempts = 0;
     updateAttemptsDisplay();
     resetTimer();
@@ -194,15 +194,14 @@ function removerBotaoProximaPergunta() {
 
 function updateAttemptsDisplay() {
     let attemptsSpan = document.getElementById('attemptsDisplay');
-    if (!attemptsSpan) {
-        // Cria o elemento se não existir
-        let balloon = document.getElementById('questionBalloon');
-        attemptsSpan = document.createElement('span');
-        attemptsSpan.id = 'attemptsDisplay';
-        attemptsSpan.className = 'text-sm text-gray-600 text-right';
-        balloon.appendChild(attemptsSpan);
+    if (attemptsSpan) {
+        // Após o fim das tentativas, limpa a contagem
+        if (attempts >= maxAttempts) {
+            attemptsSpan.innerText = '';
+        } else {
+            attemptsSpan.innerText = `${attempts + 1}/${maxAttempts}`;
+        }
     }
-    attemptsSpan.innerText = `${attempts + 1}/${maxAttempts}`;
 }
 
 function placeMarker(location) {
