@@ -63,6 +63,12 @@ function fetchQuestion() {
     currentQuestion = mockQuestions[mockIndex];
     console.log('%c[MapChat] Nova questão carregada:', 'color: blue; font-weight: bold;');
     console.log('Texto:', currentQuestion.question_text);
+    console.log('Resposta correta (lat):', currentQuestion.answer_lat);
+    console.log('Resposta correta (lng):', currentQuestion.answer_lng);
+    console.log('ID do usuário criador:', currentQuestion.user_id);
+    console.log('Categoria:', currentQuestion.category);
+    console.log('Objeto completo:', currentQuestion);
+    console.log('Dica:', currentQuestion.hint);
     // Mostra sempre o que vier do backend (dinâmico)
     if ('user_id' in currentQuestion) {
         console.log('ID do usuário criador:', currentQuestion.user_id);
