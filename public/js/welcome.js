@@ -1,5 +1,27 @@
 let map;
 let currentQuestion = null;
+// Perguntas mockadas para teste local sem API
+const mockQuestions = [
+    {
+        id: 1,
+        question_text: 'Onde fica o Cristo Redentor?',
+        category: 'Ponto turístico',
+        hint: 'Fica no Rio de Janeiro',
+        answer_lat: -22.9519,
+        answer_lng: -43.2105,
+        user_name: 'anônimo'
+    },
+    {
+        id: 2,
+        question_text: 'Onde está a Praça dos Três Poderes?',
+        category: 'Praça',
+        hint: 'Fica na capital do Brasil',
+        answer_lat: -15.7997,
+        answer_lng: -47.8645,
+        user_name: 'anônimo'
+    }
+];
+let mockIndex = 0;
 let timerInterval = null;
 let timeLeft = 30;
 let attempts = 0;
@@ -23,26 +45,20 @@ function initMap() {
 }
 
 function fetchQuestion() {
-    fetch('/api/question/random')
-        .then(res => res.json())
-        .then(data => {
-            if (data.error) {
-                document.getElementById('questionText').innerText = data.error;
-                return;
-            }
-            currentQuestion = data;
-            document.getElementById('questionText').innerText = data.question_text;
-            // Exibe o nome do usuário que criou a pergunta
-            document.getElementById('hint').style.display = 'block';
-            document.getElementById('hint').innerText = 'Pergunta criada por: ' + (data.user_name ? data.user_name : 'anônimo');
-            attempts = 0;
-            updateAttemptsDisplay();
-            resetTimer();
-            removerBotaoProximaPergunta();
-        })
-        .catch(() => {
-            document.getElementById('questionText').innerText = 'Erro ao carregar pergunta.';
-        });
+    // Seleciona pergunta mockada
+    if (mockQuestions.length === 0) {
+        document.getElementById('questionText').innerText = 'Nenhuma pergunta disponível.';
+        return;
+    }
+    currentQuestion = mockQuestions[mockIndex];
+    document.getElementById('questionText').innerText = currentQuestion.question_text;
+    document.getElementById('hint').style.display = 'block';
+    document.getElementById('hint').innerText = 'Pergunta criada por: ' + (currentQuestion.user_name ? currentQuestion.user_name : 'anônimo');
+    attempts = 0;
+    updateAttemptsDisplay();
+    resetTimer();
+    removerBotaoProximaPergunta();
+    mockIndex = (mockIndex + 1) % mockQuestions.length;
 }
 
 function resetTimer() {
