@@ -38,14 +38,7 @@ class QuestionController extends Controller
         // Calcula direção
         $direction = $this->getDirection($request->lat, $request->lng, $question->answer_lat, $question->answer_lng);
 
-        // Salva tentativa
-        \App\Models\QuestionAttempt::create([
-            'question_id' => $question->id,
-            'attempt_lat' => $request->lat,
-            'attempt_lng' => $request->lng,
-            'is_correct' => $isCorrect,
-            'distance' => $distance,
-        ]);
+
 
         return response()->json([
             'correct' => $isCorrect,
