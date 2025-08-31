@@ -26,6 +26,7 @@ class QuestionController extends Controller
             'question_id' => 'required|exists:questions,id',
             'lat' => 'required|numeric',
             'lng' => 'required|numeric',
+            'user_id' => 'required|exists:users,id',
         ]);
 
         $question = Question::findOrFail($request->question_id);
