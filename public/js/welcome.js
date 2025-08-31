@@ -83,8 +83,22 @@ function enviarPalpite(lat, lng) {
             lng: lng
         })
     })
-    .then(res => res.json())
-    .then(data => {
+    .then(async res => {
+        const contentType = res.headers.get('content-type');
+        let data;
+        if (contentType && contentType.indexOf('application/json') !== -1) {
+            data = await res.json();
+        } else {
+            data = { message: await res.text() };
+        }
+        if (!res.ok) {
+            console.error('Erro na resposta da API:', data);
+            let msg = 'Erro ao validar palpite.';
+            if (data && data.message) msg += '\n' + data.message;
+            document.getElementById('questionText').innerText = msg;
+            mostrarBotaoProximaPergunta();
+            return;
+        }
         if (data.correct) {
             document.getElementById('questionText').innerText = 'Parabéns! Você acertou!';
             clearInterval(timerInterval);
@@ -100,14 +114,8 @@ function enviarPalpite(lat, lng) {
         }
     })
     .catch(async (err) => {
+        console.error('Erro na requisição fetch:', err);
         let msg = 'Erro ao validar palpite.';
-        try {
-            const res = err instanceof Response ? err : null;
-            if (res && res.json) {
-                const data = await res.json();
-                if (data && data.message) msg += '\n' + data.message;
-            }
-        } catch (e) {}
         document.getElementById('questionText').innerText = msg;
         mostrarBotaoProximaPergunta();
     });
