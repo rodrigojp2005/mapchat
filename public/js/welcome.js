@@ -3,14 +3,15 @@ let currentQuestion = null;
 // Perguntas mockadas para teste local sem API
 console.log('%c[MapChat] JS carregado em', 'color: green; font-weight: bold;', new Date().toLocaleString());
 const mockQuestions = [
+    // Exemplo de mock apenas para desenvolvimento local.
+    // No ambiente real, os campos user_id e user_name devem vir do backend/API.
     {
         id: 1,
         question_text: 'Onde fica o Cristo Redentor?',
         category: 'Ponto turístico',
         hint: 'Fica no Rio de Janeiro',
         answer_lat: -22.9519,
-        answer_lng: -43.2105,
-        user_name: 'anônimo'
+        answer_lng: -43.2105
     },
     {
         id: 2,
@@ -18,8 +19,7 @@ const mockQuestions = [
         category: 'Praça',
         hint: 'Fica na capital do Brasil',
         answer_lat: -15.7997,
-        answer_lng: -47.8645,
-        user_name: 'anônimo'
+        answer_lng: -47.8645
     },
     {
         id: 3,
@@ -27,8 +27,7 @@ const mockQuestions = [
         category: 'Mercado',
         hint: 'Fica no Norte do Brasil',
         answer_lat: -1.4521,
-        answer_lng: -48.5044,
-        user_name: 'anônimo'
+        answer_lng: -48.5044
     }
 ];
 let mockIndex = 0;
@@ -64,7 +63,8 @@ function fetchQuestion() {
     currentQuestion = mockQuestions[mockIndex];
     console.log('%c[MapChat] Nova questão carregada:', 'color: blue; font-weight: bold;');
     console.log('Texto:', currentQuestion.question_text);
-    if (currentQuestion.user_id !== undefined) {
+    // Mostra sempre o que vier do backend (dinâmico)
+    if ('user_id' in currentQuestion) {
         console.log('ID do usuário criador:', currentQuestion.user_id);
     } else {
         console.log('ID do usuário criador: não informado');
