@@ -22,6 +22,7 @@ class QuestionController extends Controller
             'hint' => $question->hint,
             'answer_lat' => $question->answer_lat,
             'answer_lng' => $question->answer_lng,
+            'user_name' => $question->user && isset($question->user->name) ? $question->user->name : 'anônimo',
         ]);
     }
     // Valida o palpite do usuário
