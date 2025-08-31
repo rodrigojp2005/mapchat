@@ -14,8 +14,9 @@
                 <span id="hint" class="ml-2 hidden text-blue-600"></span>
             </div>
         </div>
-        <button onclick="zoomIn()" class="fixed bottom-24 right-6 md:bottom-28 md:right-12 bg-blue-600 text-white w-10 h-10 rounded-full shadow-lg flex items-center justify-center text-2xl hover:bg-blue-700 z-40">+</button>
-        <button onclick="zoomOut()" class="fixed bottom-10 right-6 md:bottom-14 md:right-12 bg-blue-600 text-white w-10 h-10 rounded-full shadow-lg flex items-center justify-center text-2xl hover:bg-blue-700 z-40">-</button>
+    <!-- Botões de zoom só aparecem em telas médias para cima -->
+    <button onclick="zoomIn()" class="hidden md:fixed md:bottom-28 md:right-12 md:bg-blue-600 md:text-white md:w-10 md:h-10 md:rounded-full md:shadow-lg md:flex md:items-center md:justify-center md:text-2xl md:hover:bg-blue-700 md:z-40">+</button>
+    <button onclick="zoomOut()" class="hidden md:fixed md:bottom-14 md:right-12 md:bg-blue-600 md:text-white md:w-10 md:h-10 md:rounded-full md:shadow-lg md:flex md:items-center md:justify-center md:text-2xl md:hover:bg-blue-700 md:z-40">-</button>
     </div>
 @endsection
 
