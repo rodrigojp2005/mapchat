@@ -19,6 +19,15 @@ const mockQuestions = [
         answer_lat: -15.7997,
         answer_lng: -47.8645,
         user_name: 'anônimo'
+    },
+    {
+        id: 3,
+        question_text: 'Em que cidade está o Mercado Ver-o-Peso?',
+        category: 'Mercado',
+        hint: 'Fica no Norte do Brasil',
+        answer_lat: -1.4521,
+        answer_lng: -48.5044,
+        user_name: 'anônimo'
     }
 ];
 let mockIndex = 0;
@@ -51,6 +60,7 @@ function fetchQuestion() {
         return;
     }
     currentQuestion = mockQuestions[mockIndex];
+    console.log('Pergunta carregada:', currentQuestion);
     document.getElementById('questionText').innerText = currentQuestion.question_text;
     document.getElementById('hint').style.display = 'block';
     document.getElementById('hint').innerText = 'Pergunta criada por: ' + (currentQuestion.user_name ? currentQuestion.user_name : 'anônimo');
@@ -90,14 +100,19 @@ function enviarPalpite(lat, lng) {
     // Validação no frontend
     const answerLat = currentQuestion.answer_lat;
     const answerLng = currentQuestion.answer_lng;
+    console.log('Palpite recebido:', { lat, lng });
+    console.log('Resposta correta:', { answerLat, answerLng });
     const distance = haversine(lat, lng, answerLat, answerLng);
     const isCorrect = distance < 10; // 10km de tolerância
     const direction = getDirection(lat, lng, answerLat, answerLng);
+    console.log('Distância calculada:', distance.toFixed(2), 'km');
+    console.log('Direção:', direction);
 
     if (isCorrect) {
         document.getElementById('questionText').innerText = 'Parabéns! Você acertou!';
         clearInterval(timerInterval);
         mostrarBotaoProximaPergunta();
+        console.log('Resultado: ACERTOU');
     } else {
         let msg = `Errou! Distância: ${distance.toFixed(2)} km. Dica: ${direction}`;
         if (attempts >= maxAttempts) {
@@ -106,6 +121,7 @@ function enviarPalpite(lat, lng) {
             mostrarBotaoProximaPergunta();
         }
         document.getElementById('questionText').innerText = msg;
+        console.log('Resultado: ERROU');
     }
 }
 
