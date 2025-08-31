@@ -195,8 +195,8 @@ function removerBotaoProximaPergunta() {
 function updateAttemptsDisplay() {
     let attemptsSpan = document.getElementById('attemptsDisplay');
     if (attemptsSpan) {
-        // Após o fim das tentativas, limpa a contagem
-        if (attempts >= maxAttempts) {
+        // Só limpa a contagem se for a última pergunta do ciclo
+        if (attempts >= maxAttempts && mockIndex === 0) {
             attemptsSpan.innerText = '';
         } else {
             attemptsSpan.innerText = `${attempts + 1}/${maxAttempts}`;
