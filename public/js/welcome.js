@@ -108,20 +108,54 @@ function enviarPalpite(lat, lng) {
     console.log('Distância calculada:', distance.toFixed(2), 'km');
     console.log('Direção:', direction);
 
+    // Imagens ilustrativas para cada direção
+    const directionImages = {
+        'Norte': '🡱',
+        'Nordeste': '🡱🡲',
+        'Leste': '🡲',
+        'Sudeste': '🡳🡲',
+        'Sul': '🡳',
+        'Sudoeste': '🡳🡸',
+        'Oeste': '🡸',
+        'Noroeste': '🡱🡸'
+    };
+    let title, html, icon, imageUrl = '', imageHtml = '';
+    if (directionImages[direction]) {
+        imageHtml = `<div style='font-size:2.5em; margin-bottom:0.3em;'>${directionImages[direction]}</div>`;
+    }
     if (isCorrect) {
-        document.getElementById('questionText').innerText = 'Parabéns! Você acertou!';
+        title = '🎉 Parabéns! Você acertou!';
+        html = `${imageHtml}<div style='font-size:1.1em;'>Você acertou a localização!<br><b>Distância:</b> ${distance.toFixed(2)} km<br><b>Direção:</b> ${direction}</div>`;
+        icon = undefined;
+        imageUrl = 'https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExaHRrN3c5aWwxNnI5eWhua2k2OW4za3ZxMG9neDQwY2NpODNqdjFpMiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/qHaKRvrEA00Hm/giphy.gif';
         clearInterval(timerInterval);
         mostrarBotaoProximaPergunta();
         console.log('Resultado: ACERTOU');
     } else {
-        let msg = `Errou! Distância: ${distance.toFixed(2)} km. Dica: ${direction}`;
+        title = 'Tente novamente!';
+        html = `${imageHtml}<div style='font-size:1.1em;'>Errou!<br><b>Distância:</b> ${distance.toFixed(2)} km<br><b>Direção:</b> ${direction}</div>`;
+       // icon = undefined;
+        imageUrl = 'https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExdmtrYnB0bTNyYm03eDZ3bmhlc3dxZWJncXh3a24zOTlkNWJqbnc3OSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/SB0NySeYf268N2Nhv7/giphy.gif';
         if (attempts >= maxAttempts) {
-            msg += '\nLimite de tentativas atingido!';
+            html += '<br><b>Limite de tentativas atingido!</b>';
             clearInterval(timerInterval);
             mostrarBotaoProximaPergunta();
         }
-        document.getElementById('questionText').innerText = msg;
         console.log('Resultado: ERROU');
+    }
+    if (typeof Swal !== 'undefined' && typeof Swal.fire === 'function') {
+        Swal.fire({
+            title: title,
+            html: html,
+          //  icon: icon,
+            imageUrl: imageUrl,
+            imageHeight: 180,
+            confirmButtonText: 'OK',
+            colorButton: '#3085d6',
+            customClass: {popup: 'rounded-lg'},
+        });
+    } else {
+        alert(title + '\n' + html.replace(/<[^>]+>/g, ''));
     }
 }
 
