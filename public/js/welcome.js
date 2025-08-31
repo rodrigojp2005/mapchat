@@ -66,11 +66,9 @@ function fetchQuestion() {
     console.log('Texto:', currentQuestion.question_text);
     if (currentQuestion.user_id !== undefined) {
         console.log('ID do usuário criador:', currentQuestion.user_id);
+    } else {
+        console.log('ID do usuário criador: não informado');
     }
-    if (currentQuestion.user_name !== undefined) {
-        console.log('Nome do usuário criador:', currentQuestion.user_name);
-    }
-    console.log('Objeto completo:', currentQuestion);
     document.getElementById('questionText').innerText = currentQuestion.question_text;
     document.getElementById('hint').style.display = 'block';
     document.getElementById('hint').innerHTML = `<b>Pergunta criada:</b> ${currentQuestion.user_name ? currentQuestion.user_name : 'anônimo'}`;
