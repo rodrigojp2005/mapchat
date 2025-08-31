@@ -47,6 +47,7 @@ function initMap() {
         center: { lat: -14.2350, lng: -51.9253 }, // Centro do Brasil
         zoom: 4,
         disableDefaultUI: true,
+        gestureHandling: 'greedy', // Permite arrastar com um dedo no mobile
     });
     fetchQuestion();
     map.addListener('click', onMapClick);
@@ -108,33 +109,17 @@ function enviarPalpite(lat, lng) {
     console.log('Distância calculada:', distance.toFixed(2), 'km');
     console.log('Direção:', direction);
 
-    // Imagens ilustrativas para cada direção
-    const directionImages = {
-        'Norte': '🡱',
-        'Nordeste': '🡱🡲',
-        'Leste': '🡲',
-        'Sudeste': '🡳🡲',
-        'Sul': '🡳',
-        'Sudoeste': '🡳🡸',
-        'Oeste': '🡸',
-        'Noroeste': '🡱🡸'
-    };
-    let title, html, icon, imageUrl = '', imageHtml = '';
-    if (directionImages[direction]) {
-        imageHtml = `<div style='font-size:2.5em; margin-bottom:0.3em;'>${directionImages[direction]}</div>`;
-    }
+    let title, html, imageUrl = '';
     if (isCorrect) {
         title = '🎉 Parabéns! Você acertou!';
-        html = `${imageHtml}<div style='font-size:1.1em;'>Você acertou a localização!<br><b>Distância:</b> ${distance.toFixed(2)} km<br><b>Direção:</b> ${direction}</div>`;
-        icon = undefined;
+        html = `<div style='font-size:1.1em;'>Você acertou a localização!<br><b>Distância:</b> ${distance.toFixed(2)} km<br><b>Direção:</b> ${direction}</div>`;
         imageUrl = 'https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExaHRrN3c5aWwxNnI5eWhua2k2OW4za3ZxMG9neDQwY2NpODNqdjFpMiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/qHaKRvrEA00Hm/giphy.gif';
         clearInterval(timerInterval);
         mostrarBotaoProximaPergunta();
         console.log('Resultado: ACERTOU');
     } else {
         title = 'Tente novamente!';
-        html = `${imageHtml}<div style='font-size:1.1em;'>Errou!<br><b>Distância:</b> ${distance.toFixed(2)} km<br><b>Direção:</b> ${direction}</div>`;
-       // icon = undefined;
+        html = `<div style='font-size:1.1em;'>Errou!<br><b>Distância:</b> ${distance.toFixed(2)} km<br><b>Direção:</b> ${direction}</div>`;
         imageUrl = 'https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExdmtrYnB0bTNyYm03eDZ3bmhlc3dxZWJncXh3a24zOTlkNWJqbnc3OSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/SB0NySeYf268N2Nhv7/giphy.gif';
         if (attempts >= maxAttempts) {
             html += '<br><b>Limite de tentativas atingido!</b>';
@@ -147,12 +132,13 @@ function enviarPalpite(lat, lng) {
         Swal.fire({
             title: title,
             html: html,
-          //  icon: icon,
             imageUrl: imageUrl,
             imageHeight: 180,
             confirmButtonText: 'OK',
-            colorButton: '#3085d6',
-            customClass: {popup: 'rounded-lg'},
+            customClass: {
+                popup: 'rounded-lg',
+                confirmButton: 'bg-blue-600 text-white px-6 py-2 rounded font-bold',
+            },
         });
     } else {
         alert(title + '\n' + html.replace(/<[^>]+>/g, ''));
