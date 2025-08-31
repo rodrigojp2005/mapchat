@@ -71,54 +71,52 @@ function onMapClick(event) {
 
 
 function enviarPalpite(lat, lng) {
-    fetch('/api/question/guess', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-        },
-        body: JSON.stringify({
-            question_id: currentQuestion.id,
-            lat: lat,
-            lng: lng
-        })
-    })
-    .then(async res => {
-        const contentType = res.headers.get('content-type');
-        let data;
-        if (contentType && contentType.indexOf('application/json') !== -1) {
-            data = await res.json();
-        } else {
-            data = { message: await res.text() };
-        }
-        if (!res.ok) {
-            console.error('Erro na resposta da API:', data);
-            let msg = 'Erro ao validar palpite.';
-            if (data && data.message) msg += '\n' + data.message;
-            document.getElementById('questionText').innerText = msg;
-            mostrarBotaoProximaPergunta();
-            return;
-        }
-        if (data.correct) {
-            document.getElementById('questionText').innerText = 'Parabéns! Você acertou!';
+    // Validação no frontend
+    const answerLat = currentQuestion.answer_lat;
+    const answerLng = currentQuestion.answer_lng;
+    const distance = haversine(lat, lng, answerLat, answerLng);
+    const isCorrect = distance < 10; // 10km de tolerância
+    const direction = getDirection(lat, lng, answerLat, answerLng);
+
+    if (isCorrect) {
+        document.getElementById('questionText').innerText = 'Parabéns! Você acertou!';
+        clearInterval(timerInterval);
+        mostrarBotaoProximaPergunta();
+    } else {
+        let msg = `Errou! Distância: ${distance.toFixed(2)} km. Dica: ${direction}`;
+        if (attempts >= maxAttempts) {
+            msg += '\nLimite de tentativas atingido!';
             clearInterval(timerInterval);
             mostrarBotaoProximaPergunta();
-        } else {
-            let msg = `Errou! Distância: ${data.distance} km. Dica: ${data.direction}`;
-            if (attempts >= maxAttempts) {
-                msg += '\nLimite de tentativas atingido!';
-                clearInterval(timerInterval);
-                mostrarBotaoProximaPergunta();
-            }
-            document.getElementById('questionText').innerText = msg;
         }
-    })
-    .catch(async (err) => {
-        console.error('Erro na requisição fetch:', err);
-        let msg = 'Erro ao validar palpite.';
         document.getElementById('questionText').innerText = msg;
-        mostrarBotaoProximaPergunta();
-    });
+    }
+}
+
+// Fórmula de Haversine para calcular distância entre dois pontos
+function haversine(lat1, lon1, lat2, lon2) {
+    const earthRadius = 6371; // km
+    const dLat = deg2rad(lat2 - lat1);
+    const dLon = deg2rad(lon2 - lon1);
+    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+        Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+        Math.sin(dLon/2) * Math.sin(dLon/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return earthRadius * c;
+}
+
+function deg2rad(deg) {
+    return deg * (Math.PI/180);
+}
+
+// Retorna direção cardinal aproximada
+function getDirection(lat1, lon1, lat2, lon2) {
+    const dLat = lat2 - lat1;
+    const dLon = lon2 - lon1;
+    const angle = Math.atan2(dLon, dLat) * 180 / Math.PI;
+    const directions = ['Norte', 'Nordeste', 'Leste', 'Sudeste', 'Sul', 'Sudoeste', 'Oeste', 'Noroeste'];
+    const index = Math.round(((angle + 360) % 360) / 45) % 8;
+    return directions[index];
 }
 
 

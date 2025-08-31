@@ -20,6 +20,8 @@ class QuestionController extends Controller
             'question_text' => $question->question_text,
             'category' => $question->category,
             'hint' => $question->hint,
+            'answer_lat' => $question->answer_lat,
+            'answer_lng' => $question->answer_lng,
         ]);
     }
     // Valida o palpite do usuário
