@@ -10,7 +10,7 @@
         <div id="questionBalloon" class="absolute left-1/2 top-24 md:top-20 transform -translate-x-1/2 z-30 w-11/12 max-w-md bg-white rounded-xl shadow-xl border border-blue-200 p-4 flex flex-col gap-2">
             <div class="font-semibold text-lg text-blue-700 mb-1" id="questionText">Carregando pergunta...</div>
             <div class="flex justify-between text-sm text-gray-600 mt-1">
-                <span id="timer" class="font-mono">30</span>
+                <span id="timer" class="font-mono font-bold text-red-600">30</span>
                 <span id="hint" class="ml-2 hidden text-blue-600"></span>
             </div>
         </div>
