@@ -1,6 +1,7 @@
 let map;
 let currentQuestion = null;
 // Perguntas mockadas para teste local sem API
+console.log('%c[MapChat] JS carregado em', 'color: green; font-weight: bold;', new Date().toLocaleString());
 const mockQuestions = [
     {
         id: 1,
@@ -61,7 +62,15 @@ function fetchQuestion() {
         return;
     }
     currentQuestion = mockQuestions[mockIndex];
-    console.log('Pergunta carregada:', currentQuestion);
+    console.log('%c[MapChat] Nova questão carregada:', 'color: blue; font-weight: bold;');
+    console.log('Texto:', currentQuestion.question_text);
+    if (currentQuestion.user_id !== undefined) {
+        console.log('ID do usuário criador:', currentQuestion.user_id);
+    }
+    if (currentQuestion.user_name !== undefined) {
+        console.log('Nome do usuário criador:', currentQuestion.user_name);
+    }
+    console.log('Objeto completo:', currentQuestion);
     document.getElementById('questionText').innerText = currentQuestion.question_text;
     document.getElementById('hint').style.display = 'block';
     document.getElementById('hint').innerHTML = `<b>Pergunta criada:</b> ${currentQuestion.user_name ? currentQuestion.user_name : 'anônimo'}`;
