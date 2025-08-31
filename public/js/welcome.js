@@ -64,7 +64,7 @@ function fetchQuestion() {
     console.log('Pergunta carregada:', currentQuestion);
     document.getElementById('questionText').innerText = currentQuestion.question_text;
     document.getElementById('hint').style.display = 'block';
-    document.getElementById('hint').innerHTML = `<b>Pergunta criada por:</b> ${currentQuestion.user_name ? currentQuestion.user_name : 'anônimo'}`;
+    document.getElementById('hint').innerHTML = `<b>Pergunta criada:</b> ${currentQuestion.user_name ? currentQuestion.user_name : 'anônimo'}`;
     attempts = 0;
     updateAttemptsDisplay();
     resetTimer();
