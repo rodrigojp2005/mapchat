@@ -115,14 +115,14 @@ function enviarPalpite(lat, lng) {
     let title, html, imageUrl = '';
     if (isCorrect) {
         title = '🎉 Parabéns! Você acertou!';
-        html = `<div style='font-size:1.1em;'>Você acertou a localização!<br><b>Distância:</b> ${distance.toFixed(2)} km<br><b>Direção:</b> ${direction}</div>`;
+        html = `<div style='font-size:1.1em;'>Você acertou a localização!<br><b>Distância:</b> ${distance.toFixed(2)} km<br><b>Direção:</b> ${direction}<br><b style='color:red;'>Tentativas usadas: ${attempts}/${maxAttempts}</b></div>`;
         imageUrl = 'https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExaHRrN3c5aWwxNnI5eWhua2k2OW4za3ZxMG9neDQwY2NpODNqdjFpMiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/qHaKRvrEA00Hm/giphy.gif';
         clearInterval(timerInterval);
         mostrarBotaoProximaPergunta();
         console.log('Resultado: ACERTOU');
     } else {
         title = 'Tente novamente!';
-        html = `<div style='font-size:1.1em;'>Errou!<br><b>Distância:</b> ${distance.toFixed(2)} km<br><b>Direção:</b> ${direction}</div>`;
+        html = `<div style='font-size:1.1em;'>Errou!<br><b>Distância:</b> ${distance.toFixed(2)} km<br><b>Direção:</b> ${direction}<br><b style='color:red;'>Tentativas: ${attempts}/${maxAttempts}</b></div>`;
         imageUrl = 'https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExdmtrYnB0bTNyYm03eDZ3bmhlc3dxZWJncXh3a24zOTlkNWJqbnc3OSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/SB0NySeYf268N2Nhv7/giphy.gif';
         if (attempts >= maxAttempts) {
             html += '<br><b>Limite de tentativas atingido!</b>';
@@ -202,7 +202,7 @@ function updateAttemptsDisplay() {
         if (attempts >= maxAttempts && mockIndex === 0) {
             attemptsSpan.innerText = '';
         } else {
-            attemptsSpan.innerText = `${attempts + 1}/${maxAttempts}`;
+            attemptsSpan.innerText = `${attempts}/${maxAttempts}`;
         }
     }
 }

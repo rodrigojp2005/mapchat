@@ -10,7 +10,8 @@
         <div id="questionBalloon" class="absolute left-1/2 top-24 md:top-20 transform -translate-x-1/2 z-30 w-11/12 max-w-md bg-white rounded-xl shadow-xl border border-blue-200 p-4 flex flex-col gap-2">
             <div class="font-semibold text-lg text-blue-700 mb-1" id="questionText">Carregando pergunta...</div>
             <div class="flex justify-between text-sm text-gray-600 mt-1">
-                <span id="timer" class="font-mono font-bold text-red-600">30</span>
+                <span id="timer" class="font-mono font-bold text-red-600 pulse-timer">30</span>
+                <span id="attemptsDisplay" class="font-mono font-bold text-red-600"></span>
                 <span id="hint" class="ml-2 hidden text-blue-600"></span>
             </div>
         </div>
@@ -20,7 +21,27 @@
     </div>
 @endsection
 
-@push('scripts')
+@push('styles')
+<style>
+.pulse-timer {
+    animation: pulse 1s infinite;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #dc2626; /* red-600 */
+    text-shadow: 0 0 5px rgba(220, 38, 38, 0.5);
+}
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+    }
+}
+</style>
+@endpush
 <!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="/js/welcome.js"></script>
