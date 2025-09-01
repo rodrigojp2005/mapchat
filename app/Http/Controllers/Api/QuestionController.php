@@ -15,9 +15,16 @@ class QuestionController extends Controller
         if (!$question) {
             return response()->json(['error' => 'Nenhuma pergunta disponível.'], 404);
         }
-    $data = $question->toArray();
-    $data['user_name'] = $question->user ? $question->user->name : 'anônimo';
-    return response()->json($data);
+        return response()->json([
+            'id' => $question->id,
+            'question_text' => $question->question_text,
+            'category' => $question->category,
+            'hint' => $question->hint,
+            'answer_lat' => $question->answer_lat,
+            'answer_lng' => $question->answer_lng,
+            'user_id' => $question->user_id,
+            'user_name' => $question->user ? $question->user->name : 'anônimo',
+        ]);
     }
     // Valida o palpite do usuário
     public function guess(Request $request)
