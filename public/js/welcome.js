@@ -55,34 +55,24 @@ function initMap() {
 }
 
 function fetchQuestion() {
-    // Seleciona pergunta mockada
-    if (mockQuestions.length === 0) {
-        document.getElementById('questionText').innerText = 'Nenhuma pergunta disponível.';
-        return;
-    }
-    currentQuestion = mockQuestions[mockIndex];
-    console.log('%c[MapChat] Nova questão carregada:', 'color: blue; font-weight: bold;');
-    console.log('Texto:', currentQuestion.question_text);
-    console.log('Resposta correta (lat):', currentQuestion.answer_lat);
-    console.log('Resposta correta (lng):', currentQuestion.answer_lng);
-    console.log('ID do usuário criador:', currentQuestion.user_id);
-    console.log('Categoria:', currentQuestion.category);
-    console.log('Objeto completo:', currentQuestion);
-    console.log('Dica:', currentQuestion.hint);
-    // Mostra sempre o que vier do backend (dinâmico)
-    if ('user_id' in currentQuestion) {
-        console.log('ID do usuário criador:', currentQuestion.user_id);
-    } else {
-        console.log('ID do usuário criador: não informado');
-    }
-    document.getElementById('questionText').innerText = currentQuestion.question_text;
-    document.getElementById('hint').style.display = 'block';
-    document.getElementById('hint').innerHTML = `<b>Pergunta criada:</b> ${currentQuestion.user_name ? currentQuestion.user_name : 'anônimo'}`;
-    attempts = 0;
-    updateAttemptsDisplay();
-    resetTimer();
-    removerBotaoProximaPergunta();
-    mockIndex = (mockIndex + 1) % mockQuestions.length;
+    fetch('/api/question/random')
+        .then(res => res.json())
+        .then(data => {
+            console.log('%c[MapChat] JSON da API:', 'color: orange; font-weight: bold;', data);
+            currentQuestion = data;
+            console.log('ID do usuário criador:', currentQuestion.user_id);
+            document.getElementById('questionText').innerText = currentQuestion.question_text;
+            document.getElementById('hint').style.display = 'block';
+            document.getElementById('hint').innerHTML = `<b>Pergunta criada:</b> ${currentQuestion.user_name ? currentQuestion.user_name : 'anônimo'}`;
+            attempts = 0;
+            updateAttemptsDisplay();
+            resetTimer();
+            removerBotaoProximaPergunta();
+        })
+        .catch(err => {
+            console.error('Erro ao buscar questão da API:', err);
+            document.getElementById('questionText').innerText = 'Erro ao carregar pergunta.';
+        });
 }
 
 function resetTimer() {
