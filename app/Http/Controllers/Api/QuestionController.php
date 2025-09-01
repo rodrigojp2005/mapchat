@@ -11,10 +11,11 @@ class QuestionController extends Controller
     // Retorna uma pergunta aleatória
     public function random()
     {
-        $question = Question::with('user')->inRandomOrder()->first();
+        $question = \DB::table('questions')->inRandomOrder()->first();
         if (!$question) {
             return response()->json(['error' => 'Nenhuma pergunta disponível.'], 404);
         }
+        $user = \DB::table('users')->where('id', $question->user_id)->first();
         return response()->json([
             'id' => $question->id,
             'question_text' => $question->question_text,
@@ -23,7 +24,7 @@ class QuestionController extends Controller
             'answer_lat' => $question->answer_lat,
             'answer_lng' => $question->answer_lng,
             'user_id' => $question->user_id,
-            'user_name' => $question->user ? $question->user->name : 'anônimo',
+            'user_name' => $user ? $user->name : 'anônimo',
         ]);
     }
     // Valida o palpite do usuário
